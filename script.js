@@ -114,7 +114,7 @@ const expenseTableBody = document.getElementById('expense-table-body');
 const totalAmountCell = document.getElementById('total-amount');
 
 // Backend API URL
-const API_URL = "https://expense-racker-backend2-19.onrender.com/api/expenses";
+const API_URL = "https://expense-racker-backend2-24.onrender.com/api/expenses";
 
 
 // ✅ Load expenses from backend
