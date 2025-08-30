@@ -1,88 +1,205 @@
-let expenses = []; // Array to store expenses
-let totalAmount = 0; // Track total balance
+// let expenses = []; // Store expenses
+// let totalAmount = 0; // Track total
 
-const API_URL = "https://expense-racker-backend2-18.onrender.com";
+// // DOM elements
+// const categorySelect = document.getElementById('category_select');
+// const amountInput = document.getElementById('amount_input');
+// const InfoInput = document.getElementById('info');
+// const dateInput = document.getElementById('date_input');
+// const addBtn = document.getElementById('add_btn');
+// const expenseTableBody = document.getElementById('expense-table-body');
+// const totalAmountCell = document.getElementById('total-amount');
 
-// Example fetch expenses
-fetch(`${API_URL}/api/expenses`)
-  .then(res => res.json())
-  .then(data => console.log(data));
+// // Backend API URL
+// const API_URL = "https://expense-racker-backend2-14.onrender.com/api/expenses";
+
+// // ✅ Load expenses from backend
+// async function loadExpenses() {
+//   try {
+//     const response = await fetch(API_URL);
+//     expenses = await response.json();
+//     renderTable();
+//   } catch (err) {
+//     console.error("Error fetching expenses:", err);
+//   }
+// }
+
+// // ✅ Render table
+// function renderTable() {
+//   expenseTableBody.innerHTML = "";
+//   totalAmount = 0;
+
+//   for (const expense of expenses) {
+//     if (expense.category === 'Income') {
+//       totalAmount += expense.amount;
+//     } else if (expense.category === 'Expense') {
+//       totalAmount -= expense.amount;
+//     }
+
+//     const newRow = expenseTableBody.insertRow();
+//     const categoryCell = newRow.insertCell();
+//     const AmountCell = newRow.insertCell();
+//     const InfoCell = newRow.insertCell();
+//     const dateCell = newRow.insertCell();
+//     const deleteCell = newRow.insertCell();
+
+//     categoryCell.textContent = expense.category;
+//     AmountCell.textContent = expense.amount;
+//     InfoCell.textContent = expense.info;
+//     dateCell.textContent = expense.date;
+
+//     const deleteBtn = document.createElement('button');
+//     deleteBtn.textContent = 'Delete';
+//     deleteBtn.classList.add('delete-btn');
+//     deleteBtn.addEventListener('click', () => deleteExpense(expense._id));
+//     deleteCell.appendChild(deleteBtn);
+//   }
+
+//   totalAmountCell.textContent = totalAmount;
+// }
+
+// // ✅ Add new expense
+// addBtn.addEventListener('click', async function () {
+//   const category = categorySelect.value;
+//   const info = InfoInput.value;
+//   const amount = Number(amountInput.value);
+//   const date = dateInput.value;
+
+//   if (!category) return alert('Please select a category');
+//   if (isNaN(amount) || amount <= 0) return alert('Please enter a valid amount');
+//   if (!info) return alert('Please enter info');
+//   if (!date) return alert('Please select a date');
+
+//   const newExpense = { category, amount, info, date };
+
+//   try {
+//     const response = await fetch(API_URL, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(newExpense)
+//     });
+//     const savedExpense = await response.json();
+//     expenses.push(savedExpense);
+//     renderTable();
+//   } catch (err) {
+//     console.error("Error adding expense:", err);
+//   }
+// });
+
+// // ✅ Delete expense
+// async function deleteExpense(id) {
+//   try {
+//     await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+//     expenses = expenses.filter(e => e._id !== id);
+//     renderTable();
+//   } catch (err) {
+//     console.error("Error deleting expense:", err);
+//   }
+// }
+
+// // Load expenses on page load
+// document.addEventListener("DOMContentLoaded", loadExpenses);
+
+
+let expenses = []; // Store expenses
+let totalAmount = 0; // Track total
 
 // DOM elements
 const categorySelect = document.getElementById('category_select');
 const amountInput = document.getElementById('amount_input');
-const infoInput = document.getElementById('info');
+const InfoInput = document.getElementById('info');
 const dateInput = document.getElementById('date_input');
 const addBtn = document.getElementById('add_btn');
 const expenseTableBody = document.getElementById('expense-table-body');
 const totalAmountCell = document.getElementById('total-amount');
 
-function updateTable() {
-  expenseTableBody.innerHTML = '';
+// Backend API URL
+const API_URL = "https://expense-racker-backend2-19.onrender.com/api/expenses";
+
+
+// ✅ Load expenses from backend
+async function loadExpenses() {
+  try {
+    const response = await fetch(API_URL);
+    expenses = await response.json();
+    renderTable();
+  } catch (err) {
+    console.error("Error fetching expenses:", err);
+  }
+}
+
+// ✅ Render table
+function renderTable() {
+  expenseTableBody.innerHTML = "";
   totalAmount = 0;
 
-  expenses.forEach((expense, index) => {
-    if (expense.category === 'Income') totalAmount += expense.amount;
-    if (expense.category === 'Expense') totalAmount -= expense.amount;
+  for (const expense of expenses) {
+    if (expense.category === 'Income') {
+      totalAmount += expense.amount;
+    } else if (expense.category === 'Expense') {
+      totalAmount -= expense.amount;
+    }
 
     const newRow = expenseTableBody.insertRow();
-
     const categoryCell = newRow.insertCell();
-    const amountCell = newRow.insertCell();
-    const infoCell = newRow.insertCell();
+    const AmountCell = newRow.insertCell();
+    const InfoCell = newRow.insertCell();
     const dateCell = newRow.insertCell();
     const deleteCell = newRow.insertCell();
 
     categoryCell.textContent = expense.category;
-    amountCell.textContent = expense.amount;
-    infoCell.textContent = expense.info;
+    AmountCell.textContent = expense.amount;
+    InfoCell.textContent = expense.info;
     dateCell.textContent = expense.date;
 
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
     deleteBtn.classList.add('delete-btn');
-    deleteBtn.addEventListener('click', () => {
-      expenses.splice(index, 1);
-      updateTable();
-    });
-
+    deleteBtn.addEventListener('click', () => deleteExpense(expense._id));
     deleteCell.appendChild(deleteBtn);
-  });
+  }
 
   totalAmountCell.textContent = totalAmount;
 }
 
-addBtn.addEventListener('click', () => {
+// ✅ Add new expense
+addBtn.addEventListener('click', async function () {
   const category = categorySelect.value;
+  const info = InfoInput.value;
   const amount = Number(amountInput.value);
-  const info = infoInput.value;
   const date = dateInput.value;
 
-  // Validations
-  if (!category) {
-    alert('Please select a category');
-    return;
-  }
-  if (isNaN(amount) || amount <= 0) {
-    alert('Please enter a valid amount');
-    return;
-  }
-  if (!info) {
-    alert('Please enter info');
-    return;
-  }
-  if (!date) {
-    alert('Please select a date');
-    return;
-  }
+  if (!category) return alert('Please select a category');
+  if (isNaN(amount) || amount <= 0) return alert('Please enter a valid amount');
+  if (!info) return alert('Please enter info');
+  if (!date) return alert('Please select a date');
 
-  // Add expense
-  expenses.push({ category, amount, info, date });
-  updateTable();
+  const newExpense = { category, amount, info, date };
 
-  // Clear inputs
-  categorySelect.value = '';
-  amountInput.value = '';
-  infoInput.value = '';
-  dateInput.value = '';
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newExpense)
+    });
+    const savedExpense = await response.json();
+    expenses.push(savedExpense);
+    renderTable();
+  } catch (err) {
+    console.error("Error adding expense:", err);
+  }
 });
+
+// ✅ Delete expense
+async function deleteExpense(id) {
+  try {
+    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+    expenses = expenses.filter(e => e._id !== id);
+    renderTable();
+  } catch (err) {
+    console.error("Error deleting expense:", err);
+  }
+}
+
+// ✅ Load expenses on page load
+document.addEventListener("DOMContentLoaded", loadExpenses);
